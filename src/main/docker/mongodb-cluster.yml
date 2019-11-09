@@ -1,0 +1,16 @@
+version: '2'
+services:
+  pmooos-mongodb:
+    image: mongo:4.0.12
+    ports:
+      - '27017:27017'
+    command: mongos --configdb pmooos-mongodb-config
+  pmooos-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  pmooos-mongodb-config:
+    image: mongo:4.0.12
+    container_name: pmooos-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
